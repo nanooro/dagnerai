@@ -71,6 +71,17 @@ const Carousel = forwardRef<CarouselRef>((props, ref) => {
       // Test the getCurrentSlide method
       const currentSlide = slides[emblaApi.selectedScrollSnap()];
       console.log('Current slide data:', currentSlide);
+
+      // Ensure the API is fully ready before exposing methods
+      const checkApiReady = () => {
+        if (emblaApi && typeof emblaApi.selectedScrollSnap === 'function') {
+          console.log('Embla API is fully ready');
+        } else {
+          console.log('Embla API not fully ready, retrying...');
+          setTimeout(checkApiReady, 50);
+        }
+      };
+      checkApiReady();
     }
   }, [emblaApi, slides])
 
@@ -94,19 +105,24 @@ const Carousel = forwardRef<CarouselRef>((props, ref) => {
     }
   }, [emblaApi])
 
+  const getCurrentSlide = React.useCallback(() => {
+    if (emblaApi) {
+      const currentIndex = emblaApi.selectedScrollSnap();
+      const slide = slides[currentIndex];
+      console.log('getCurrentSlide called, returning:', slide);
+      return slide || slides[0];
+    }
+    console.log('getCurrentSlide called but emblaApi is null, returning default');
+    return slides[0];
+  }, [emblaApi, slides])
+
   // Expose methods to parent component
   useImperativeHandle(ref, () => ({
     scrollPrev,
     scrollNext,
     emblaApi,
-    getCurrentSlide: () => {
-      if (emblaApi) {
-        const currentIndex = emblaApi.selectedScrollSnap();
-        return slides[currentIndex] || slides[0];
-      }
-      return slides[0];
-    }
-  }), [scrollPrev, scrollNext, emblaApi, slides])
+    getCurrentSlide
+  }), [scrollPrev, scrollNext, emblaApi, getCurrentSlide])
 
   return (
     <div className="fixed inset-0 w-screen h-screen -z-10 pointer-events-auto">

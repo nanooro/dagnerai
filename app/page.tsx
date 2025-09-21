@@ -19,6 +19,18 @@ export default function Home() {
   const carouselRef = useRef<CarouselRef>(null);
   const [currentSlide, setCurrentSlide] = useState<{ id: number; title: string; content: string; bgColor: string } | null>(null);
 
+  // Initialize with first slide data
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (carouselRef.current) {
+        const slide = carouselRef.current.getCurrentSlide();
+        console.log('Initial slide data:', slide);
+        setCurrentSlide(slide);
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handlePrevClick = () => {
     console.log('Previous button clicked - calling scrollPrev');
     if (carouselRef.current) {
@@ -88,7 +100,7 @@ export default function Home() {
         <h1 className="text-4xl text-white mt-2 text-center font-semibold flex bg-transparent justify-center items-center flex-col">
           Start your journey with{" "}
           <span className="bg-gradient-to-r h-24 from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent font-bold">
-            {currentSlide ? currentSlide.title : "Loading..."}
+            {currentSlide?.title || "Loading..."}
           </span>
         </h1>
       </div>
