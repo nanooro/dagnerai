@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -35,7 +35,7 @@ export default function ChatPage() {
     }
   }
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (isDragging && modalRef.current) {
       const rect = modalRef.current.getBoundingClientRect()
       const centerX = rect.left + rect.width / 2
@@ -46,7 +46,7 @@ export default function ChatPage() {
 
       setModalPosition({ x: newX, y: newY })
     }
-  }
+  }, [isDragging])
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault()
@@ -59,7 +59,7 @@ export default function ChatPage() {
     setIsDragging(false)
   }
 
-  const handleTouchMove = (e: TouchEvent) => {
+  const handleTouchMove = useCallback((e: TouchEvent) => {
     if (isDragging && modalRef.current && e.touches.length === 1) {
       e.preventDefault()
       const touch = e.touches[0]
@@ -72,7 +72,7 @@ export default function ChatPage() {
 
       setModalPosition({ x: newX, y: newY })
     }
-  }
+  }, [isDragging])
 
   const handleTouchEnd = () => {
     setIsDragging(false)
