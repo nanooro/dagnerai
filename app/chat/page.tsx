@@ -5,18 +5,18 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { ArrowLeft, Send, Bot, User } from 'lucide-react'
+import { ArrowLeft, Send, Bot, User, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
-export default function ChatPageContent() {
+function ChatContent() {
+  const searchParams = useSearchParams()
+  const character = searchParams.get('character') || 'Ai Hoshino'
+  
   interface Message {
     role: 'user' | 'assistant'
     content: string
     timestamp: Date
   }
-
-  const searchParams = useSearchParams()
-  const character = searchParams.get('character') || 'Ai Hoshino'
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -559,46 +559,29 @@ Current conversation context: The user is asking: "${input.trim()}"
                     className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6 shadow-lg"
                   >
                     {isLoading ? (
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                        Sending...
-                      </div>
+                      <Loader2 className="h-5 w-5 animate-spin" />
                     ) : (
-                      <div className="flex items-center gap-2">
-                        <Send className="h-4 w-4" />
-                        Send
-                      </div>
+                      'Send'
                     )}
                   </Button>
                 </div>
               </form>
             </div>
           </div>
-
-          <button
-            onClick={() => setShowInput(!showInput)}
-            className={`fixed bottom-6 right-6 z-[60] w-14 h-14 rounded-full shadow-xl transition-all duration-300 ${
-              showInput
-                ? 'bg-red-500 hover:bg-red-600 scale-100'
-                : 'bg-blue-500 hover:bg-blue-600 scale-100'
-            }`}
-            aria-label={showInput ? 'Close input' : 'Open input'}
-          >
-            {showInput ? (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto text-white">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            ) : (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto text-white">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                <line x1="9" y1="10" x2="15" y2="10"></line>
-                <line x1="12" y1="7" x2="12" y2="13"></line>
-              </svg>
-            )}
-          </button>
         </>
       )}
     </div>
+  )
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+      </div>
+    }>
+      <ChatContent />
+    </Suspense>
   )
 }
