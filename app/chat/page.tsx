@@ -94,27 +94,27 @@ function ChatPageContent() {
     }
   }, [isDragging, handleMouseMove, handleTouchMove])
 
-interface CharacterInfo {
-  fullName: string
-  age: string
-  occupation: string
-  personality: string
-  relationships: Record<string, string>
-  backstory: string
-  keyFacts: string[]
-}
+  interface CharacterInfo {
+    fullName: string
+    age: string
+    occupation: string
+    personality: string
+    relationships: Record<string, string>
+    backstory: string
+    keyFacts: string[]
+  }
 
-interface CharacterKnowledge {
-  'Ai Hoshino': CharacterInfo
-  'Aqua Hoshino': CharacterInfo
-  'Ruby Hoshino': CharacterInfo
-  'Kana Arima': CharacterInfo
-  'Akane Kurokawa': CharacterInfo
-  'Mem-cho': CharacterInfo
-}
+  interface CharacterKnowledge {
+    'Ai Hoshino': CharacterInfo
+    'Aqua Hoshino': CharacterInfo
+    'Ruby Hoshino': CharacterInfo
+    'Kana Arima': CharacterInfo
+    'Akane Kurokawa': CharacterInfo
+    'Mem-cho': CharacterInfo
+  }
 
-// Oshi no Ko character knowledge base
-const characterKnowledge: CharacterKnowledge = {
+  // Oshi no Ko character knowledge base
+  const characterKnowledge: CharacterKnowledge = {
     'Ai Hoshino': {
       fullName: 'Ai Hoshino',
       age: '20 (deceased)',
@@ -602,3 +602,5 @@ Current conversation context: The user is asking: "${input.trim()}"
     </div>
   )
 }
+
+export default ChatPageContent
