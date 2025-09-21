@@ -565,12 +565,10 @@ Current conversation context: The user is asking: "${input.trim()}"
                 <line x1="9" y1="10" x2="15" y2="10"></line>
                 <line x1="12" y1="7" x2="12" y2="13"></line>
               </svg>
-            </div>
+            )}
           </button>
         </>
       )}
     </div>
   )
 }
-
-export const dynamic = 'force-dynamic'
