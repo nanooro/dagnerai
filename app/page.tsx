@@ -18,16 +18,24 @@ interface CarouselRef {
 export default function Home() {
   const carouselRef = useRef<CarouselRef>(null);
   const [currentSlide, setCurrentSlide] = useState<{ id: number; title: string; content: string; bgColor: string } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Initialize with first slide data
   useEffect(() => {
     const timer = setTimeout(() => {
       if (carouselRef.current) {
-        const slide = carouselRef.current.getCurrentSlide();
-        console.log('Initial slide data:', slide);
-        setCurrentSlide(slide);
+        try {
+          const slide = carouselRef.current.getCurrentSlide();
+          console.log('Initial slide data:', slide);
+          if (slide && typeof slide === 'object' && slide.title) {
+            setCurrentSlide(slide);
+          }
+        } catch (error) {
+          console.error('Error getting initial slide:', error);
+        }
       }
-    }, 100);
+      setIsLoading(false);
+    }, 200); // Increased delay to ensure carousel is ready
     return () => clearTimeout(timer);
   }, []);
 
@@ -37,9 +45,15 @@ export default function Home() {
       carouselRef.current.scrollPrev();
       // Manually update the slide display
       setTimeout(() => {
-        const slide = carouselRef.current?.getCurrentSlide();
-        console.log('Manual update - Previous slide:', slide);
-        setCurrentSlide(slide || null);
+        try {
+          const slide = carouselRef.current?.getCurrentSlide();
+          console.log('Manual update - Previous slide:', slide);
+          if (slide && typeof slide === 'object' && slide.title) {
+            setCurrentSlide(slide);
+          }
+        } catch (error) {
+          console.error('Error updating previous slide:', error);
+        }
       }, 50);
     }
   };
@@ -50,9 +64,15 @@ export default function Home() {
       carouselRef.current.scrollNext();
       // Manually update the slide display
       setTimeout(() => {
-        const slide = carouselRef.current?.getCurrentSlide();
-        console.log('Manual update - Next slide:', slide);
-        setCurrentSlide(slide || null);
+        try {
+          const slide = carouselRef.current?.getCurrentSlide();
+          console.log('Manual update - Next slide:', slide);
+          if (slide && typeof slide === 'object' && slide.title) {
+            setCurrentSlide(slide);
+          }
+        } catch (error) {
+          console.error('Error updating next slide:', error);
+        }
       }, 50);
     }
   };
@@ -62,9 +82,17 @@ export default function Home() {
     const checkCarousel = () => {
       if (carouselRef.current) {
         const updateSlide = () => {
-          const slide = carouselRef.current?.getCurrentSlide();
-          console.log('Event listener triggered - Current slide:', slide);
-          setCurrentSlide(slide || null);
+          try {
+            const slide = carouselRef.current?.getCurrentSlide();
+            console.log('Event listener triggered - Current slide:', slide);
+            if (slide && typeof slide === 'object' && slide.title) {
+              setCurrentSlide(slide);
+            } else {
+              console.warn('Invalid slide data received:', slide);
+            }
+          } catch (error) {
+            console.error('Error updating slide:', error);
+          }
         };
 
         updateSlide(); // Initial call
@@ -100,7 +128,7 @@ export default function Home() {
         <h1 className="text-4xl text-white mt-2 text-center font-semibold flex bg-transparent justify-center items-center flex-col">
           Start your journey with{" "}
           <span className="bg-gradient-to-r h-24 from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent font-bold">
-            {currentSlide?.title || "Loading..."}
+            {isLoading ? "Loading..." : (currentSlide?.title || "Ai Hoshino")}
           </span>
         </h1>
       </div>
@@ -143,7 +171,7 @@ export default function Home() {
       </button>
 
       <div className="fixed bottom-0 left-0 w-screen bg-transparent justify-center items-center p-4 z-10 flex">
-        <Link href={`/chat?character=${encodeURIComponent(currentSlide?.title || 'Ai Hoshino')}`}>
+        <Link href={`/chat?character=${encodeURIComponent(isLoading ? 'Ai Hoshino' : (currentSlide?.title || 'Ai Hoshino'))}`}>
           <Button className="w-24 scale-150 bg-red-500 hover:bg-red-600 text-white text-xl self-center">
             start
           </Button>

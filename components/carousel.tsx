@@ -113,7 +113,7 @@ const Carousel = forwardRef<CarouselRef>((props, ref) => {
       return slide || slides[0];
     }
     console.log('getCurrentSlide called but emblaApi is null, returning default');
-    return slides[0];
+    return slides[0]; // Always return a proper slide object
   }, [emblaApi, slides])
 
   // Expose methods to parent component
