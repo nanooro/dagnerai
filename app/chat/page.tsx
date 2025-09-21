@@ -94,8 +94,27 @@ function ChatPageContent() {
     }
   }, [isDragging, handleMouseMove, handleTouchMove])
 
-  // Oshi no Ko character knowledge base
-  const characterKnowledge = {
+interface CharacterInfo {
+  fullName: string
+  age: string
+  occupation: string
+  personality: string
+  relationships: Record<string, string>
+  backstory: string
+  keyFacts: string[]
+}
+
+interface CharacterKnowledge {
+  'Ai Hoshino': CharacterInfo
+  'Aqua Hoshino': CharacterInfo
+  'Ruby Hoshino': CharacterInfo
+  'Kana Arima': CharacterInfo
+  'Akane Kurokawa': CharacterInfo
+  'Mem-cho': CharacterInfo
+}
+
+// Oshi no Ko character knowledge base
+const characterKnowledge: CharacterKnowledge = {
     'Ai Hoshino': {
       fullName: 'Ai Hoshino',
       age: '20 (deceased)',
@@ -220,7 +239,7 @@ function ChatPageContent() {
     }
   }
 
-  const getCharacterInfo = (characterName: string, infoType: 'relationships' | 'backstory' | 'personality' | 'keyFacts' | 'all') => {
+  const getCharacterInfo = (characterName: string, infoType: 'relationships' | 'backstory' | 'personality' | 'keyFacts' | 'all'): CharacterInfo | string => {
     const char = characterKnowledge[characterName as keyof typeof characterKnowledge]
     if (!char) return 'I don\'t have information about that character.'
 
@@ -232,7 +251,7 @@ function ChatPageContent() {
       }
     }
 
-    return char[infoType]
+    return char[infoType as keyof CharacterInfo]
   }
 
   useEffect(() => {
@@ -258,7 +277,7 @@ function ChatPageContent() {
 
     try {
       // Get character-specific knowledge
-      const charInfo = getCharacterInfo(character, 'all')
+      const charInfo = getCharacterInfo(character, 'all') as CharacterInfo
 
       // Create comprehensive prompt with character knowledge
       const characterPrompt = `
@@ -288,7 +307,12 @@ When users ask about other characters or relationships, use the knowledge provid
 Current conversation context: The user is asking: "${input.trim()}"
       `.trim()
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBQlfjKJ2UVYjgweS748mIT8gnmu0dwdUY`, {
+      const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
+      if (!apiKey) {
+        throw new Error('Gemini API key is not configured. Please add NEXT_PUBLIC_GEMINI_API_KEY to your .env.local file.')
+      }
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -301,6 +325,12 @@ Current conversation context: The user is asking: "${input.trim()}"
           }]
         })
       })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Gemini API Error:', response.status, errorText)
+        throw new Error(`API request failed with status ${response.status}: ${errorText}`)
+      }
 
       const data = await response.json()
 
@@ -315,9 +345,10 @@ Current conversation context: The user is asking: "${input.trim()}"
 
         setMessages(prev => [...prev, assistantMessage])
       } else {
+        console.error('Unexpected API response structure:', data)
         const errorMessage: Message = {
           role: 'assistant',
-          content: `Sorry, I encountered an error. Please try again!`,
+          content: `Sorry, I received an unexpected response from the AI service. Please try again!`,
           timestamp: new Date()
         }
         setMessages(prev => [...prev, errorMessage])
@@ -334,7 +365,6 @@ Current conversation context: The user is asking: "${input.trim()}"
     } finally {
       setIsLoading(false)
     }
-  }
 
 
   useEffect(() => {

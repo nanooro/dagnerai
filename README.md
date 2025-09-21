@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Oshi no Ko AI Chat Application
 
-## Getting Started
+An interactive AI chat application featuring characters from the anime/manga series "Oshi no Ko". Users can chat with AI versions of their favorite characters using Google Gemini AI.
 
-First, run the development server:
+## Features
+
+- **Character-based AI Chat**: Chat with Ai Hoshino, Aqua Hoshino, Ruby Hoshino, Kana Arima, Akane Kurokawa, and Mem-cho
+- **Draggable Chat Interface**: Modern UI with draggable input modal
+- **Character Knowledge Base**: Each character has detailed personality, relationships, and backstory
+- **Real-time Responses**: Powered by Google Gemini AI for authentic character responses
+
+## Setup Instructions
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure Google Gemini API
+
+1. Get your API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. Create a `.env.local` file in the project root
+3. Add your API key:
+
+```bash
+NEXT_PUBLIC_GEMINI_API_KEY=your_actual_api_key_here
+```
+
+### 3. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to start chatting with your favorite Oshi no Ko characters!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Characters
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Ai Hoshino**: Energetic idol and mother figure
+- **Aqua Hoshino**: Intelligent and analytical actor
+- **Ruby Hoshino**: Passionate idol with big dreams
+- **Kana Arima**: Professional actress and idol
+- **Akane Kurokawa**: Strategic and perceptive actress
+- **Mem-cho**: Energetic social media personality
 
-## Learn More
+## Usage
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Navigate to `/chat?character=CharacterName` (e.g., `/chat?character=Ai%20Hoshino`)
+2. Start chatting with the AI character
+3. The character will respond based on their personality and knowledge from the series
