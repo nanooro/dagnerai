@@ -1,13 +1,12 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { ArrowLeft, Send, Bot, User } from "lucide-react"
-import Link from "next/link"
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { ArrowLeft, Send, Bot, User } from 'lucide-react'
+import Link from 'next/link'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -23,7 +22,6 @@ export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [isDragging, setIsDragging] = useState(false)
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [showInput, setShowInput] = useState(true)
   const [modalPosition, setModalPosition] = useState({ x: 50, y: 50 })
   const scrollAreaRef = useRef<HTMLDivElement>(null)
@@ -94,7 +92,7 @@ export default function ChatPage() {
         document.removeEventListener('touchend', handleTouchEnd)
       }
     }
-  }, [isDragging])
+  }, [isDragging, handleMouseMove, handleTouchMove])
 
   // Oshi no Ko character knowledge base
   const characterKnowledge = {
@@ -337,6 +335,7 @@ Current conversation context: The user is asking: "${input.trim()}"
       setIsLoading(false)
     }
   }
+
 
   useEffect(() => {
     // Add initial greeting message based on character personality

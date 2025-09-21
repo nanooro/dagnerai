@@ -1,9 +1,8 @@
 "use client"
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import Carousel from "@/components/carousel";
-import { useRef, useState, useEffect } from "react";
-import Link from "next/link";
+import { Button } from '@/components/ui/button'
+import Carousel from '@/components/carousel'
+import { useRef, useState, useEffect } from 'react'
+import Link from 'next/link'
 
 interface CarouselRef {
   scrollPrev: () => void;

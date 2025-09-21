@@ -1,5 +1,4 @@
 'use client'
-import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import React, { forwardRef, useImperativeHandle } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 
@@ -7,6 +6,7 @@ interface CarouselRef {
   scrollPrev: () => void;
   scrollNext: () => void;
   emblaApi: any;
+  getCurrentSlide: () => { id: number; title: string; content: string; bgColor: string };
 }
 
 const Carousel = forwardRef<CarouselRef>((props, ref) => {
@@ -17,53 +17,7 @@ const Carousel = forwardRef<CarouselRef>((props, ref) => {
     duration: 40
   })
 
-  // Debug: Log when API becomes available
-  React.useEffect(() => {
-    if (emblaApi) {
-      console.log('Carousel API is ready:', emblaApi);
-      console.log('Initial slide:', emblaApi.selectedScrollSnap());
-
-      // Test the getCurrentSlide method
-      const currentSlide = slides[emblaApi.selectedScrollSnap()];
-      console.log('Current slide data:', currentSlide);
-    }
-  }, [emblaApi])
-
-  const scrollPrev = React.useCallback(() => {
-    if (emblaApi) {
-      console.log('scrollPrev called - before:', emblaApi.selectedScrollSnap());
-      emblaApi.scrollPrev();
-      console.log('scrollPrev called - after:', emblaApi.selectedScrollSnap());
-    } else {
-      console.log('scrollPrev called but emblaApi is null');
-    }
-  }, [emblaApi])
-
-  const scrollNext = React.useCallback(() => {
-    if (emblaApi) {
-      console.log('scrollNext called - before:', emblaApi.selectedScrollSnap());
-      emblaApi.scrollNext();
-      console.log('scrollNext called - after:', emblaApi.selectedScrollSnap());
-    } else {
-      console.log('scrollNext called but emblaApi is null');
-    }
-  }, [emblaApi])
-
-  // Expose methods to parent component
-  useImperativeHandle(ref, () => ({
-    scrollPrev,
-    scrollNext,
-    emblaApi,
-    getCurrentSlide: () => {
-      if (emblaApi) {
-        const currentIndex = emblaApi.selectedScrollSnap();
-        return slides[currentIndex] || slides[0];
-      }
-      return slides[0];
-    }
-  }), [scrollPrev, scrollNext, emblaApi])
-
-  const slides = [
+  const slides = React.useMemo(() => [
     {
       id: 1,
       title: "Ai Hoshino",
@@ -106,7 +60,53 @@ const Carousel = forwardRef<CarouselRef>((props, ref) => {
       bgColor: "lava-gradient-6",
       image: "linear-gradient(135deg, #fa709a, #fee140)"
     }
-  ]
+  ], [])
+
+  // Debug: Log when API becomes available
+  React.useEffect(() => {
+    if (emblaApi) {
+      console.log('Carousel API is ready:', emblaApi);
+      console.log('Initial slide:', emblaApi.selectedScrollSnap());
+
+      // Test the getCurrentSlide method
+      const currentSlide = slides[emblaApi.selectedScrollSnap()];
+      console.log('Current slide data:', currentSlide);
+    }
+  }, [emblaApi, slides])
+
+  const scrollPrev = React.useCallback(() => {
+    if (emblaApi) {
+      console.log('scrollPrev called - before:', emblaApi.selectedScrollSnap());
+      emblaApi.scrollPrev();
+      console.log('scrollPrev called - after:', emblaApi.selectedScrollSnap());
+    } else {
+      console.log('scrollPrev called but emblaApi is null');
+    }
+  }, [emblaApi])
+
+  const scrollNext = React.useCallback(() => {
+    if (emblaApi) {
+      console.log('scrollNext called - before:', emblaApi.selectedScrollSnap());
+      emblaApi.scrollNext();
+      console.log('scrollNext called - after:', emblaApi.selectedScrollSnap());
+    } else {
+      console.log('scrollNext called but emblaApi is null');
+    }
+  }, [emblaApi])
+
+  // Expose methods to parent component
+  useImperativeHandle(ref, () => ({
+    scrollPrev,
+    scrollNext,
+    emblaApi,
+    getCurrentSlide: () => {
+      if (emblaApi) {
+        const currentIndex = emblaApi.selectedScrollSnap();
+        return slides[currentIndex] || slides[0];
+      }
+      return slides[0];
+    }
+  }), [scrollPrev, scrollNext, emblaApi, slides])
 
   return (
     <div className="fixed inset-0 w-screen h-screen -z-10 pointer-events-auto">
