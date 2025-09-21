@@ -7,7 +7,11 @@ import Link from 'next/link'
 interface CarouselRef {
   scrollPrev: () => void;
   scrollNext: () => void;
-  emblaApi: any;
+  emblaApi: {
+    on: (event: string, callback: () => void) => void;
+    off: (event: string, callback: () => void) => void;
+    selectedScrollSnap: () => number;
+  } | null;
   getCurrentSlide: () => { id: number; title: string; content: string; bgColor: string };
 }
 

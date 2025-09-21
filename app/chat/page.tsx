@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef, useCallback, Suspense } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,7 +14,7 @@ interface Message {
   timestamp: Date
 }
 
-function ChatPageContent() {
+export default function ChatPage() {
   const searchParams = useSearchParams()
   const character = searchParams.get('character') || 'Ai Hoshino'
   const [messages, setMessages] = useState<Message[]>([])
@@ -565,7 +565,7 @@ Current conversation context: The user is asking: "${input.trim()}"
                 <line x1="9" y1="10" x2="15" y2="10"></line>
                 <line x1="12" y1="7" x2="12" y2="13"></line>
               </svg>
-            )}
+            </div>
           </button>
         </>
       )}
