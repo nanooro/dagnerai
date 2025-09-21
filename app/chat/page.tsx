@@ -572,5 +572,3 @@ Current conversation context: The user is asking: "${input.trim()}"
     </div>
   )
 }
-
-export const dynamic = 'force-dynamic'
