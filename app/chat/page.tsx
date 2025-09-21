@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,7 +14,7 @@ interface Message {
   timestamp: Date
 }
 
-export default function ChatPage() {
+function ChatPageContent() {
   const searchParams = useSearchParams()
   const character = searchParams.get('character') || 'Ai Hoshino'
   const [messages, setMessages] = useState<Message[]>([])
@@ -572,3 +572,5 @@ Current conversation context: The user is asking: "${input.trim()}"
     </div>
   )
 }
+
+export const dynamic = 'force-dynamic'
