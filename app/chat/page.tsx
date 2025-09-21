@@ -8,13 +8,13 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { ArrowLeft, Send, Bot, User } from 'lucide-react'
 import Link from 'next/link'
 
-interface Message {
-  role: 'user' | 'assistant'
-  content: string
-  timestamp: Date
-}
+export default function ChatPageContent() {
+  interface Message {
+    role: 'user' | 'assistant'
+    content: string
+    timestamp: Date
+  }
 
-function ChatPageContent() {
   const searchParams = useSearchParams()
   const character = searchParams.get('character') || 'Ai Hoshino'
   const [messages, setMessages] = useState<Message[]>([])
@@ -602,5 +602,3 @@ Current conversation context: The user is asking: "${input.trim()}"
     </div>
   )
 }
-
-export default ChatPageContent
