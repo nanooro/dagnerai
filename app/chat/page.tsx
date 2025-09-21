@@ -366,6 +366,7 @@ Current conversation context: The user is asking: "${input.trim()}"
       setIsLoading(false)
     }
 
+}
   useEffect(() => {
     // Add initial greeting message based on character personality
     let greeting = ''
