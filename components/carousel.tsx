@@ -23,42 +23,42 @@ const Carousel = forwardRef<CarouselRef>((props, ref) => {
       title: "Ai Hoshino",
       content: "The main character and famous idol",
       bgColor: "lava-gradient-1",
-      image: "linear-gradient(135deg, #ff6b6b, #4ecdc4)"
+      image: "/characters/aiHosino.jpg"
     },
     {
       id: 2,
       title: "Aqua Hoshino",
       content: "Ai's son with a mysterious past",
       bgColor: "lava-gradient-2",
-      image: "linear-gradient(135deg, #667eea, #764ba2)"
+      image: "/characters/Aqua-Silvamillion.webp"
     },
     {
       id: 3,
       title: "Ruby Hoshino",
       content: "Ai's daughter and aspiring idol",
       bgColor: "lava-gradient-3",
-      image: "linear-gradient(135deg, #f093fb, #f5576c)"
+      image: "/characters/ruby.jpg"
     },
     {
       id: 4,
       title: "Kana Arima",
       content: "Child actress turned idol",
       bgColor: "lava-gradient-4",
-      image: "linear-gradient(135deg, #4facfe, #00f2fe)"
+      image: "/characters/kana.webp"
     },
     {
       id: 5,
       title: "Akane Kurokawa",
       content: "Talented actress and idol",
       bgColor: "lava-gradient-5",
-      image: "linear-gradient(135deg, #43e97b, #38f9d7)"
+      image: "/characters/akane.jpg"
     },
     {
       id: 6,
       title: "Mem-cho",
       content: "The bubbly and energetic idol",
       bgColor: "lava-gradient-6",
-      image: "linear-gradient(135deg, #fa709a, #fee140)"
+      image: "/characters/memChojpg.jpg"
     }
   ], [])
 
@@ -137,8 +137,12 @@ const Carousel = forwardRef<CarouselRef>((props, ref) => {
                 <div className="lava-particles absolute inset-0"></div>
                 {/* Character gradient background */}
                 <div
-                  className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
-                  style={{ background: slide.image }}
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
+                  style={
+                    typeof slide.image === 'string' && slide.image.startsWith('/')
+                      ? { backgroundImage: `url(${slide.image})` }
+                      : { background: slide.image }
+                  }
                 ></div>
                 <div className="text-center opacity-90 pointer-events-none relative z-10">
                   <h3 className="text-4xl font-bold mb-4 text-white">{slide.title}</h3>
